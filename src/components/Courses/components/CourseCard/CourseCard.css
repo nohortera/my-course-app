@@ -1,0 +1,11 @@
+.course-card {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 10%;
+}
+
+.course-card__description, p {
+    text-align: start;
+}
+
+

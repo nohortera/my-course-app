@@ -1,0 +1,17 @@
+.textarea {
+    width: 100%;
+    height: 10vh;
+}
+
+label {
+    text-align: start;
+}
+
+.textarea-label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .5rem;
+    padding: .5rem 0;
+    margin-bottom: .5rem;
+}

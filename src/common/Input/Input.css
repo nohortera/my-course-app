@@ -1,0 +1,6 @@
+input {
+    border: 1px solid black;
+    height: 40px;
+    border-radius: 5px;
+    padding-left: .5rem;
+}

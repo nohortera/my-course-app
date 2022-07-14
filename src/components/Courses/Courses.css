@@ -1,0 +1,19 @@
+.courses-head {
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    /*justify-content: space-between;*/
+    text-align: start;
+    padding-left: 20px;
+}
+
+ul {
+    padding: 0 20px;
+}
+
+li {
+    border: 1px solid black;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+
