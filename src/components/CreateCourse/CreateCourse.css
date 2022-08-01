@@ -40,3 +40,8 @@ input {
     gap: .5rem;
     padding: .5rem 0;
 }
+
+li {
+    display: flex;
+    align-items: center;
+}

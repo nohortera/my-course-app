@@ -1,7 +1,6 @@
 .courses-head {
     display: grid;
     grid-template-columns: 1fr 240px;
-    /*justify-content: space-between;*/
     text-align: start;
     padding-left: 20px;
 }

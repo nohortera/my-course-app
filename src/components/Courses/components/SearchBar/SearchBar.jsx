@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Input from '../../../../common/Input/Input';
 import Button from '../../../../common/Button/Button';
 import './SearchBar.css';
+import PropTypes from 'prop-types';
 
 function SearchBar(props) {
 	const [filter, setFilter] = useState('');
@@ -22,5 +23,9 @@ function SearchBar(props) {
 		</form>
 	);
 }
+
+SearchBar.propTypes = {
+	getFilter: PropTypes.func.isRequired,
+};
 
 export default SearchBar;

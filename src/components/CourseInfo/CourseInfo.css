@@ -1,0 +1,33 @@
+.course-info {
+    text-align: start;
+}
+
+.course-info__back-link {
+    display: block;
+    margin: 20px;
+}
+
+.course-info__header {
+    text-align: center;
+}
+
+.course-info__description {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    margin: 20px;
+    gap: 20px;
+}
+
+.course-info__description li, .course-info__description ul {
+    display: block;
+    text-align: start;
+    border: none;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 5px;
+}
+
+.course-info__description_authors-header {
+    margin: 16px 0 10px 0;
+}
+

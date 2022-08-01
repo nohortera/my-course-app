@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Textarea.css';
+import PropTypes from 'prop-types';
 
 function Textarea(props) {
 	const [value, setValue] = useState('');
@@ -24,5 +25,11 @@ function Textarea(props) {
 		</label>
 	);
 }
+
+Textarea.propTupes = {
+	labelText: PropTypes.string,
+	placeholder: PropTypes.string,
+	getValue: PropTypes.func,
+};
 
 export default Textarea;

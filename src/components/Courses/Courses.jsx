@@ -1,18 +1,22 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import CourseCard from './components/CourseCard/CourseCard';
 // import { mockedAuthorsList, mockedCoursesList } from '../../mocks/mock-card';
 import SearchBar from './components/SearchBar/SearchBar';
 import Button from '../../common/Button/Button';
 import './Courses.css';
+import Context from '../../context/context';
+import { useNavigate } from 'react-router-dom';
 
-function Courses(props) {
+function Courses() {
+	const { authorsList, coursesList } = useContext(Context);
 	const [filter, setFilter] = useState('');
+	const navigate = useNavigate();
 
 	function getFilter(value) {
 		setFilter(value);
 	}
 
-	const courses = props.data.coursesList
+	const courses = coursesList
 		.filter(
 			(course) =>
 				course.id.toLowerCase().includes(filter.toLowerCase()) ||
@@ -20,14 +24,9 @@ function Courses(props) {
 		)
 		.map((course, index) => (
 			<li key={index}>
-				<CourseCard data={course} authInfo={props.data.authorsList} />
+				<CourseCard data={course} authInfo={authorsList} />
 			</li>
 		));
-
-	function handleButton(e) {
-		e.preventDefault();
-		props.renderCreateCourse();
-	}
 
 	return (
 		<div>
@@ -36,7 +35,7 @@ function Courses(props) {
 				<Button
 					className={'mr20'}
 					buttonText='Add new course'
-					onClick={handleButton}
+					onClick={() => navigate('/courses/add')}
 				/>
 			</div>
 			<ul className='courses-list'>{courses}</ul>

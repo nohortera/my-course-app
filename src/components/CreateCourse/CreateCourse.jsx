@@ -6,14 +6,16 @@ import './CreateCourse.css';
 import preformattedDuration from '../../helpers/pipeDuration';
 import Context from '../../context/context';
 import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
 
-function CreateCourse(props) {
-	const { addAuthor, addCourse } = useContext(Context);
+function CreateCourse() {
+	const { addAuthor, addCourse, authorsList } = useContext(Context);
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [authorName, setAuthorName] = useState('');
 	const [duration, setDuration] = useState(parseInt(''));
 	const [courseAuthors, setCourseAuthors] = useState([]);
+	const navigate = useNavigate();
 
 	function getTitle(value) {
 		setTitle(value);
@@ -44,13 +46,12 @@ function CreateCourse(props) {
 			duration,
 			authors: courseAuthors,
 		});
-		props.renderCourses();
+		navigate('/courses');
 	}
 
 	function addCourseAuthor(e) {
 		e.preventDefault();
 		const id = e.target.parentElement.id;
-		// const author = props.authorsList.find((author) => author.id === id);
 		setCourseAuthors(courseAuthors.concat(id));
 	}
 
@@ -60,7 +61,7 @@ function CreateCourse(props) {
 		setCourseAuthors(courseAuthors.filter((id) => id !== selectedId));
 	}
 
-	const allAuthors = props.authorsList.map((author, index) => {
+	const allAuthors = authorsList.map((author, index) => {
 		const check = courseAuthors.find((id) => id === author.id);
 		if (check) {
 			return null;
@@ -73,7 +74,7 @@ function CreateCourse(props) {
 		);
 	});
 
-	const authors = props.authorsList.map((author, index) => {
+	const authors = authorsList.map((author, index) => {
 		if (!courseAuthors.includes(author.id)) return null;
 		return (
 			<li id={author.id} key={index} className='author'>
@@ -85,8 +86,8 @@ function CreateCourse(props) {
 
 	function newAuthor(e) {
 		e.preventDefault();
+		if (authorName === '') return alert('Please, fill in author name');
 		addAuthor({ id: uuidv4(), name: authorName });
-		setAuthorName('');
 	}
 
 	return (
