@@ -1,22 +1,23 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import CourseCard from './components/CourseCard/CourseCard';
-// import { mockedAuthorsList, mockedCoursesList } from '../../mocks/mock-card';
 import SearchBar from './components/SearchBar/SearchBar';
 import Button from '../../common/Button/Button';
 import './Courses.css';
-import Context from '../../context/context';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { fetchData } from '../../store/services';
+import { getCourses } from '../../store/selectors';
 
 function Courses() {
-	const { authorsList, coursesList } = useContext(Context);
 	const [filter, setFilter] = useState('');
 	const navigate = useNavigate();
+	const coursesFromStore = useSelector(getCourses);
 
 	function getFilter(value) {
 		setFilter(value);
 	}
 
-	const courses = coursesList
+	const courses = coursesFromStore
 		.filter(
 			(course) =>
 				course.id.toLowerCase().includes(filter.toLowerCase()) ||
@@ -24,9 +25,15 @@ function Courses() {
 		)
 		.map((course, index) => (
 			<li key={index}>
-				<CourseCard data={course} authInfo={authorsList} />
+				<CourseCard data={course} />
 			</li>
 		));
+
+	useEffect(() => {
+		if (!coursesFromStore.length) {
+			fetchData();
+		}
+	}, []);
 
 	return (
 		<div>

@@ -5,12 +5,18 @@ import preformattedDuration from '../../../../helpers/pipeDuration';
 import dateGenerator from '../../../../helpers/dateGenerator';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { pencilSVG, crossSVG } from '../../../../images/svgs';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAuthors } from '../../../../store/selectors';
+import { deleteCourse } from '../../../../store/courses/actionCreators';
 
 function CourseCard(props) {
 	const navigate = useNavigate();
-	const authors = [];
+	const dispatch = useDispatch();
+	const authors = useSelector(getAuthors);
+	const courseAuthors = [];
 	props.data.authors.forEach((id) => {
-		authors.push(props.authInfo.find((author) => author.id === id).name);
+		courseAuthors.push(authors.find((author) => author.id === id).name);
 	});
 
 	return (
@@ -21,7 +27,7 @@ function CourseCard(props) {
 			</div>
 			<div className='course-card__info'>
 				<p>
-					<strong>Authors:</strong> {authors.join(', ')}
+					<strong>Authors:</strong> {courseAuthors.join(', ')}
 				</p>
 				<p>
 					<strong>Duration:</strong> {preformattedDuration(props.data.duration)}{' '}
@@ -30,10 +36,18 @@ function CourseCard(props) {
 				<p>
 					<strong>Created:</strong> {dateGenerator(props.data.creationDate)}
 				</p>
-				<Button
-					buttonText='Show course'
-					onClick={() => navigate(`/courses/${props.data.id}`)}
-				/>
+				<div className='course-card__buttons'>
+					<Button
+						buttonText='Show course'
+						onClick={() => navigate(`/courses/${props.data.id}`)}
+					/>
+					<Button buttonText={pencilSVG} width='40px' />
+					<Button
+						buttonText={crossSVG}
+						width='40px'
+						onClick={() => dispatch(deleteCourse(props.data.id))}
+					/>
+				</div>
 			</div>
 		</div>
 	);

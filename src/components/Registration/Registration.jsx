@@ -1,9 +1,9 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import Input from '../../common/Input/Input';
 import Button from '../../common/Button/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import './Registration.css';
-import axios from 'axios';
+import { registrationReq } from '../../store/services';
 
 function Registration() {
 	const [name, setName] = useState('');
@@ -28,12 +28,7 @@ function Registration() {
 		setIsError(false);
 		e.preventDefault();
 		try {
-			const response = await axios.post('http://localhost:4000/register', {
-				name,
-				email,
-				password,
-			});
-			// console.log(result);
+			const response = await registrationReq(name, email, password);
 			if (!isError && response.data.successful) navigate('/login');
 		} catch (e) {
 			setIsError(true);

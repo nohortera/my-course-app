@@ -3,16 +3,19 @@ import { Logo } from './components/Logo/Logo';
 import Button from '../../common/Button/Button';
 import './Header.css';
 import { Link, useNavigate } from 'react-router-dom';
-import Context from '../../context/context';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser } from '../../store/selectors';
+import { logoutUser } from '../../store/user/actionCreators';
 
 function Header() {
 	const navigate = useNavigate();
-	const { authCheck, isAuth } = useContext(Context);
 	const storage = window.localStorage;
+	const user = useSelector(getUser);
+	const dispatch = useDispatch();
 
 	const logout = () => {
 		storage.clear();
-		authCheck();
+		dispatch(logoutUser());
 		navigate('/login');
 	};
 
@@ -21,9 +24,9 @@ function Header() {
 			<Link to='/courses'>
 				<Logo />
 			</Link>
-			{isAuth && (
+			{user.isAuth && (
 				<div>
-					<span>{storage.getItem('user')}</span>
+					<span>{user.name}</span>
 					<Button className='mr20' buttonText='Logout' onClick={logout} />
 				</div>
 			)}

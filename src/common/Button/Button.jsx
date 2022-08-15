@@ -8,6 +8,7 @@ function Button(props) {
 			className={props.className}
 			type={props.type}
 			onClick={props.onClick}
+			style={{ width: props.width }}
 		>
 			{props.buttonText}
 		</button>
@@ -15,7 +16,8 @@ function Button(props) {
 }
 
 Button.propTypes = {
-	buttonText: PropTypes.string.isRequired,
+	buttonText: PropTypes.oneOfType([PropTypes.string, PropTypes.node])
+		.isRequired,
 	className: PropTypes.string,
 	onClick: PropTypes.func,
 	type: PropTypes.oneOf(['submit', 'reset', 'button']),

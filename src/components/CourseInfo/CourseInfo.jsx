@@ -1,17 +1,17 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import preformattedDuration from '../../helpers/pipeDuration';
 import dateGenerator from '../../helpers/dateGenerator';
-import Context from '../../context/context';
 import { useParams, Link } from 'react-router-dom';
 import './CourseInfo.css';
+import { useSelector } from 'react-redux';
 
 function CourseInfo() {
-	const { authorsList, coursesList } = useContext(Context);
 	const { id } = useParams();
-	const course = coursesList.find((course) => course.id === id);
-	const authors = [];
+	const { courses, authors } = useSelector((state) => state);
+	const course = courses.find((course) => course.id === id);
+	const courseAuthors = [];
 	course.authors.forEach((id) => {
-		authors.push(authorsList.find((author) => author.id === id));
+		courseAuthors.push(authors.find((author) => author.id === id));
 	});
 
 	return (
@@ -38,7 +38,7 @@ function CourseInfo() {
 							Authors:
 						</h4>
 						<ul>
-							{authors.map((author) => (
+							{courseAuthors.map((author) => (
 								<li key={author.id}>{author.name}</li>
 							))}
 						</ul>
