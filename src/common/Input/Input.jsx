@@ -3,7 +3,7 @@ import './Input.css';
 import PropTypes from 'prop-types';
 
 function Input(props) {
-	const [value, setValue] = useState('');
+	const [value, setValue] = useState(props.value ? props.value : '');
 
 	function handleChange(e) {
 		setValue(e.target.value);
@@ -11,12 +11,13 @@ function Input(props) {
 
 	useEffect(() => {
 		props.getValue(value);
-	});
+	}, [value]);
 
 	return (
 		<label className={props.className}>
 			{props.labelText}
 			<input
+				required={props.required}
 				type={props.type}
 				value={value}
 				placeholder={props.placeholder}
@@ -56,6 +57,7 @@ Input.propTypes = {
 	getValue: PropTypes.func,
 	labelText: PropTypes.string,
 	className: PropTypes.string,
+	required: PropTypes.bool,
 };
 
 Input.defaultProps = {

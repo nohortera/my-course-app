@@ -3,7 +3,7 @@ import './Textarea.css';
 import PropTypes from 'prop-types';
 
 function Textarea(props) {
-	const [value, setValue] = useState('');
+	const [value, setValue] = useState(props.value ? props.value : '');
 
 	function handleChange(e) {
 		setValue(e.target.value);
@@ -11,7 +11,7 @@ function Textarea(props) {
 
 	useEffect(() => {
 		props.getValue(value);
-	});
+	}, [value]);
 
 	return (
 		<label className='textarea-label'>

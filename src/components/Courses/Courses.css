@@ -13,7 +13,9 @@ li {
     border: 1px solid black;
     margin-bottom: 20px;
     padding: 20px;
-    /*border-radius: 5px;*/
+    border-radius: 5px;
+    /*box-shadow: grey 0 0 5px;*/
+    /*background: #efefef;*/
     /*background: #f5deb370;*/
     /*background: linear-gradient(160deg, #f5deb370, #87cefa70);*/
     /*background: linear-gradient(160deg, wheat 50%, #87cefa70);*/

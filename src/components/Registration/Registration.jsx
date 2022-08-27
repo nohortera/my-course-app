@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Input from '../../common/Input/Input';
 import Button from '../../common/Button/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import './Registration.css';
 import { registrationReq } from '../../store/services';
+import { useSelector } from 'react-redux';
+import { getUser } from '../../store/selectors';
 
 function Registration() {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [isError, setIsError] = useState(false);
+	const { isAuth } = useSelector(getUser);
 	const navigate = useNavigate();
 
 	function getName(value) {
@@ -35,6 +38,14 @@ function Registration() {
 			console.error(e);
 		}
 	};
+
+	useEffect(() => {
+		if (isAuth) navigate('/courses', { replace: true });
+	}, [isAuth]);
+
+	useEffect(() => {
+		console.log('render registration');
+	}, []);
 
 	return (
 		<>

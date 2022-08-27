@@ -7,13 +7,15 @@ import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { pencilSVG, crossSVG } from '../../../../images/svgs';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAuthors } from '../../../../store/selectors';
-import { deleteCourse } from '../../../../store/courses/actionCreators';
+import { getAuthors, getUser } from '../../../../store/selectors';
+import { ADMIN } from '../../../../store/user/roles';
+import { thunkDeleteCourse } from '../../../../store/courses/thunk';
 
 function CourseCard(props) {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const authors = useSelector(getAuthors);
+	const { role } = useSelector(getUser);
 	const courseAuthors = [];
 	props.data.authors.forEach((id) => {
 		courseAuthors.push(authors.find((author) => author.id === id).name);
@@ -41,12 +43,20 @@ function CourseCard(props) {
 						buttonText='Show course'
 						onClick={() => navigate(`/courses/${props.data.id}`)}
 					/>
-					<Button buttonText={pencilSVG} width='40px' />
-					<Button
-						buttonText={crossSVG}
-						width='40px'
-						onClick={() => dispatch(deleteCourse(props.data.id))}
-					/>
+					{role === ADMIN && (
+						<>
+							<Button
+								buttonText={pencilSVG}
+								width='40px'
+								onClick={() => navigate(`/courses/update/${props.data.id}`)}
+							/>
+							<Button
+								buttonText={crossSVG}
+								width='40px'
+								onClick={() => dispatch(thunkDeleteCourse(props.data.id))}
+							/>
+						</>
+					)}
 				</div>
 			</div>
 		</div>

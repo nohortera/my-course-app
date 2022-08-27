@@ -20,21 +20,3 @@ button:hover svg {
     fill: wheat;
     transform: rotateY(360deg);
 }
-
-/*Button {*/
-/*    border: none;*/
-/*    background-color: #ccc;*/
-/*    color: black;*/
-/*    border-radius: 5px;*/
-/*    height: 40px;*/
-/*    width: 200px;*/
-/*    transition: 0.2s;*/
-/*    outline: none;*/
-/*}*/
-
-/*Button:hover {*/
-/*    cursor: pointer;*/
-/*    background-color: black;*/
-/*    border: none;*/
-/*    color: white;*/
-/*}*/

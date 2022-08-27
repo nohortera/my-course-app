@@ -1,7 +1,7 @@
-import { CREATE_AUTHOR, UPDATE_AUTHORS } from './actionTypes';
+import { ADD_AUTHOR, UPDATE_AUTHORS } from './actionTypes';
 
-export const createAuthor = (author) => ({
-	type: CREATE_AUTHOR,
+export const addAuthor = (author) => ({
+	type: ADD_AUTHOR,
 	payload: author,
 });
 

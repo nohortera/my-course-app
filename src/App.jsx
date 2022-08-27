@@ -1,54 +1,72 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Header from './components/Header/Header';
 import './App.css';
 import Courses from './components/Courses/Courses';
-import CreateCourse from './components/CreateCourse/CreateCourse';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import CourseForm from './components/CourseForm/CourseForm';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Registration from './components/Registration/Registration';
 import Login from './components/Login/Login';
 import CourseInfo from './components/CourseInfo/CourseInfo';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from './store/selectors';
-import { loginUser } from './store/user/actionCreators';
+import { PrivateRouter } from './components/PrivateRouter/PrivateRouter';
+import { thunkCheckCurrentUser } from './store/user/thunk';
 
 function App() {
 	const { isAuth } = useSelector(getUser);
-	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
 	function authCheck() {
 		const storage = window.localStorage;
-		if (storage.getItem('Bearer')) {
-			dispatch(
-				loginUser({
-					name: storage.getItem('user'),
-					email: storage.getItem('email'),
-					token: `Bearer ${storage.getItem('Bearer')}`,
-				})
-			);
+		if (storage.getItem('token')) {
+			const token = storage.getItem('token');
+			dispatch(thunkCheckCurrentUser(token));
 		}
 	}
 
 	useEffect(() => {
 		authCheck();
-		isAuth ? navigate('courses') : navigate('login');
-	}, [isAuth]);
+	}, []);
 
 	return (
-		<Fragment>
+		<>
 			<div className='content'>
-				<Header isAuth={isAuth} />
+				<Header />
 				<main className='content-main'>
 					<Routes>
-						<Route path='courses' element={<Courses />} />
-						<Route path='courses/add' element={<CreateCourse />} />
+						<Route
+							path='courses'
+							element={
+								isAuth ? <Courses /> : <Navigate to='/login' replace={true} />
+							}
+						/>
+						<Route
+							path='courses/add'
+							element={
+								<PrivateRouter>
+									<CourseForm />
+								</PrivateRouter>
+							}
+						/>
+						<Route path='courses/:id' element={<CourseInfo />} />
+						<Route
+							path='courses/update/:id'
+							element={
+								<PrivateRouter>
+									<CourseForm />
+								</PrivateRouter>
+							}
+						/>
 						<Route path='registration' element={<Registration />} />
 						<Route path='login' element={<Login />} />
-						<Route path='courses/:id' element={<CourseInfo />} />
+						<Route
+							path='*'
+							element={<Navigate to='/courses' replace={true} />}
+						/>
 					</Routes>
 				</main>
 			</div>
-		</Fragment>
+		</>
 	);
 }
 

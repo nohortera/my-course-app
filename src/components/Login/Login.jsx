@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Input from '../../common/Input/Input';
 import Button from '../../common/Button/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
-import { useDispatch } from 'react-redux';
-import { loginUser } from '../../store/user/actionCreators';
-import { loginReq } from '../../store/services';
+import { useDispatch, useSelector } from 'react-redux';
+import { thunkLoginUser } from '../../store/user/thunk';
+import { getUser } from '../../store/selectors';
 
 function Login() {
+	const { isAuth } = useSelector(getUser);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [isError, setIsError] = useState(false);
@@ -26,29 +27,21 @@ function Login() {
 		e.preventDefault();
 		setIsError(false);
 		try {
-			const response = await loginReq(email, password);
-			if (response.status < 400) {
-				dispatch(
-					loginUser({
-						name: response.data.user.name,
-						email: email,
-						token: response.data.result,
-					})
-				);
-				const storage = window.localStorage;
-				const accessKey = await response.data.result.split(' ')[1];
-				storage.setItem('Bearer', await accessKey);
-				storage.setItem('user', response.data.user.name);
-				storage.setItem('email', email);
-				navigate('/courses');
-			} else {
-				throw new Error(response.status.toString());
-			}
+			dispatch(thunkLoginUser({ email, password }));
+			navigate('/courses', { replace: true });
 		} catch (e) {
 			setIsError(true);
 			console.error(e);
 		}
 	}
+
+	useEffect(() => {
+		if (isAuth) navigate('/courses', { replace: true });
+	}, [isAuth]);
+
+	useEffect(() => {
+		console.log('render login');
+	}, []);
 
 	return (
 		<>
@@ -62,6 +55,7 @@ function Login() {
 						placeholder='Enter email'
 						labelText='Email'
 						getValue={getEmail}
+						required={true}
 					/>
 					<Input
 						className='login-form__field'
@@ -69,6 +63,7 @@ function Login() {
 						placeholder='Enter password'
 						labelText='Password'
 						getValue={getPassword}
+						required={true}
 					/>
 					<Button
 						className='login-form__button'

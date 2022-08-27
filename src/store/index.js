@@ -1,7 +1,8 @@
-import { combineReducers, createStore } from 'redux';
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import { userReducer } from './user/reducer';
 import { coursesReducer } from './courses/reducer';
 import { authorsReducer } from './authors/reducer';
+import thunk from 'redux-thunk';
 
 const rootReducer = combineReducers({
 	user: userReducer,
@@ -9,7 +10,9 @@ const rootReducer = combineReducers({
 	authors: authorsReducer,
 });
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 export const store = createStore(
 	rootReducer,
-	window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+	composeEnhancers(applyMiddleware(thunk))
 );

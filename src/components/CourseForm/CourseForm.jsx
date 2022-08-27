@@ -2,24 +2,27 @@ import React, { useState } from 'react';
 import Input from '../../common/Input/Input';
 import Button from '../../common/Button/Button';
 import Textarea from '../../common/Textarea/Textarea';
-import './CreateCourse.css';
+import './CourseForm.css';
 import preformattedDuration from '../../helpers/pipeDuration';
-import { v4 as uuidv4 } from 'uuid';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAuthors } from '../../store/selectors';
-import { createAuthor } from '../../store/authors/actionCreators';
-import { createCourse } from '../../store/courses/actionCreators';
+import { thunkAddCourse, thunkUpdateCourse } from '../../store/courses/thunk';
+import { thunkAddAuthor } from '../../store/authors/thunk';
 
-function CreateCourse() {
+function CourseForm() {
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [authorName, setAuthorName] = useState('');
 	const [duration, setDuration] = useState(parseInt(''));
-	const [courseAuthors, setCourseAuthors] = useState([]);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const authors = useSelector(getAuthors);
+	const { authors, courses } = useSelector((state) => state);
+	const location = useLocation();
+	const { id } = useParams();
+	const course = courses.find((course) => course.id === id);
+	const [courseAuthors, setCourseAuthors] = useState(
+		course ? course.authors : []
+	);
 
 	function getTitle(value) {
 		setTitle(value);
@@ -42,16 +45,25 @@ function CreateCourse() {
 		if (!(title && description && duration && courseAuthors.length)) {
 			return alert('Please, fill in all fields');
 		}
-		dispatch(
-			createCourse({
-				id: uuidv4(),
-				title,
-				description,
-				creationDate: new Date(Date.now()).toLocaleDateString('en-GB'),
-				duration,
-				authors: courseAuthors,
-			})
-		);
+		if (location.pathname.startsWith('/courses/update')) {
+			dispatch(
+				thunkUpdateCourse(id, {
+					title,
+					description,
+					duration,
+					authors: courseAuthors,
+				})
+			);
+		} else {
+			dispatch(
+				thunkAddCourse({
+					title,
+					description,
+					duration,
+					authors: courseAuthors,
+				})
+			);
+		}
 		navigate('/courses');
 	}
 
@@ -68,10 +80,7 @@ function CreateCourse() {
 	}
 
 	const allAuthorsList = authors.map((author, index) => {
-		const check = courseAuthors.find((id) => id === author.id);
-		if (check) {
-			return null;
-		}
+		if (courseAuthors.includes(author.id)) return null;
 		return (
 			<li id={author.id} key={index} className='author'>
 				{author.name}
@@ -96,8 +105,7 @@ function CreateCourse() {
 		if (authors.find((e) => e.name === authorName)) {
 			return alert('Author already exists');
 		}
-		const author = { id: uuidv4(), name: authorName };
-		dispatch(createAuthor(author));
+		dispatch(thunkAddAuthor({ name: authorName }));
 	}
 
 	return (
@@ -109,13 +117,30 @@ function CreateCourse() {
 					labelText='Title'
 					placeholder='Enter title...'
 					getValue={getTitle}
+					value={
+						location.pathname.startsWith('/courses/update') && course
+							? course.title
+							: null
+					}
 				/>
-				<Button buttonText='Create course' type='submit' />
+				<Button
+					buttonText={
+						location.pathname.startsWith('/courses/update')
+							? 'Update course'
+							: 'Create course'
+					}
+					type='submit'
+				/>
 			</div>
 			<Textarea
 				labelText='Description'
 				placeholder='Enter description'
 				getValue={getDescription}
+				value={
+					location.pathname.startsWith('/courses/update') && course
+						? course.description
+						: null
+				}
 			/>
 			<div className='create-form__authors'>
 				<div>
@@ -141,6 +166,11 @@ function CreateCourse() {
 						labelText='Duration'
 						placeholder='Enter duration in minutes...'
 						getValue={getDuration}
+						value={
+							location.pathname.startsWith('/courses/update') && course
+								? course.duration
+								: null
+						}
 					/>
 					<p>
 						Duration:{' '}
@@ -159,4 +189,4 @@ function CreateCourse() {
 	);
 }
 
-export default CreateCourse;
+export default CourseForm;
