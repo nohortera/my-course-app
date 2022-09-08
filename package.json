@@ -27,7 +27,7 @@
     "eslint:fix": "eslint --fix --ext .js --ext .jsx src",
     "test:nowatch": "react-scripts test --watchAll=false",
     "prepare": "husky install",
-    "prepublish": "npm run eslint:fix"
+    "prepublish": "npm run eslint:fix && npm run test:nowatch"
   },
   "eslintConfig": {
     "extends": [
@@ -57,6 +57,7 @@
     "eslint-plugin-react": "^7.30.0",
     "eslint-plugin-react-hooks": "^4.5.0",
     "husky": "^8.0.1",
+    "jest": "^27.5.1",
     "prettier": "^2.6.2"
   }
 }

@@ -7,7 +7,8 @@ import preformattedDuration from '../../helpers/pipeDuration';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { thunkAddCourse, thunkUpdateCourse } from '../../store/courses/thunk';
-import { thunkAddAuthor } from '../../store/authors/thunk';
+import { thunkAddAuthor, thunkDeleteAuthor } from '../../store/authors/thunk';
+import { crossSVG } from '../../images/svgs';
 
 function CourseForm() {
 	const [title, setTitle] = useState('');
@@ -67,9 +68,14 @@ function CourseForm() {
 		navigate('/courses');
 	}
 
-	function addCourseAuthor(e) {
+	const deleteAuthor = (e, id) => {
 		e.preventDefault();
-		const id = e.target.parentElement.id;
+		console.log(id);
+		dispatch(thunkDeleteAuthor(id));
+	};
+
+	function addCourseAuthor(e, id) {
+		e.preventDefault();
 		setCourseAuthors(courseAuthors.concat(id));
 	}
 
@@ -84,7 +90,21 @@ function CourseForm() {
 		return (
 			<li id={author.id} key={index} className='author'>
 				{author.name}
-				<Button buttonText='Add author' onClick={addCourseAuthor} />
+				<div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+					<Button
+						buttonText={crossSVG}
+						width='40px'
+						onClick={(e) => {
+							deleteAuthor(e, author.id);
+						}}
+					/>
+					<Button
+						buttonText='Add author'
+						onClick={(e) => {
+							addCourseAuthor(e, author.id);
+						}}
+					/>
+				</div>
 			</li>
 		);
 	});

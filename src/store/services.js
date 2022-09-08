@@ -91,3 +91,13 @@ export const addAuthorReq = async (author, token) => {
 		data: author,
 	});
 };
+
+export const deleteAuthorReq = async (id, token) => {
+	return axios({
+		method: 'delete',
+		url: `http://localhost:4000/authors/${id}`,
+		headers: {
+			Authorization: token,
+		},
+	});
+};

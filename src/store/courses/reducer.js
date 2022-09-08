@@ -23,7 +23,3 @@ export const coursesReducer = (state = coursesInitialState, action) => {
 			return state;
 	}
 };
-
-class Auto {
-	constructor(height, width) {}
-}
