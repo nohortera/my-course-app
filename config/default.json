@@ -1,0 +1,5 @@
+{
+  "port": 4000,
+  "secretKey": "never gonna give you up",
+  "databaseUrl": "mongodb+srv://admin:qwerty123@cluster0.kvobigy.mongodb.net/?retryWrites=true&w=majority"
+}
