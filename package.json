@@ -4,7 +4,7 @@
   "description": "Courses platform",
   "main": "app.js",
   "scripts": {
-    "prestart": "npm run client:install && npm run client:build",
+    "preinstall": "npm run client:install && npm run client:build",
     "start": "cross-env NODE_ENV=production node app.js",
     "server": "nodemon app.js",
     "client": "npm run start --prefix client",
