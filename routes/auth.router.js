@@ -35,13 +35,19 @@ router.post('/login', async (req, res) => {
         const user = await User.findOne({ email })
 
         if (!user) {
-            return res.status(400).json({ message: 'Invalid login or password' })
+            return res.status(400).json({
+                successful: false,
+                result: 'Invalid data.'
+            })
         }
 
         const check = bcrypt.compare(password, user.password)
 
         if (!check) {
-            return res.status(400).json({ message: 'Invalid login or password' })
+            return res.status(400).json({
+                successful: false,
+                result: 'Invalid data.'
+            })
         }
 
         const token = jwt.sign({ id: user.id, email: user.email }, config.get('secretKey'), { expiresIn: '1h' })
@@ -54,6 +60,14 @@ router.post('/login', async (req, res) => {
                 name: user.name
             }
         })
+    } catch (e) {
+        console.log(e)
+    }
+})
+
+router.delete('/logout', require('../middleware/verification'), async (req, res) => {
+    try {
+        res.status(200)
     } catch (e) {
         console.log(e)
     }

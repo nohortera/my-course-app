@@ -1,20 +1,9 @@
-const jwt = require('jsonwebtoken')
-const config = require('config')
 const User = require('../models/User')
+
 
 const check = async (req, res) => {
     try {
-        if (!req.headers.authorization) {
-            return res.status(403).json({
-                statusCode: 403,
-                message: 'Forbidden resource',
-                error: 'Forbidden'
-            });
-        }
-
-        const token = req.headers.authorization.split(' ')[1]
-        const decodedData = await jwt.verify(token, config.get('secretKey'))
-        const user = await User.findOne({ _id: decodedData.id })
+        const user = await User.findOne({ _id: req.decodedData.id })
 
         if (!user) {
             return res.status(401).json({ successful: false })
@@ -31,7 +20,7 @@ const check = async (req, res) => {
         })
     } catch (e) {
         console.log(e)
-        return res.status(500)
+        return res.status(500).json({ message: e.message })
     }
 }
 

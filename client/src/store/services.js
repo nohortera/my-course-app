@@ -4,12 +4,12 @@ import { store } from './index';
 import { updateAuthors } from './authors/actionCreators';
 
 export const fetchCourses = async () => {
-	const response = await axios('http://localhost:4000/courses/all');
+	const response = await axios('/courses/all');
 	store.dispatch(updateCourses(await response.data.result));
 };
 
 export const fetchAuthors = async () => {
-	const response = await axios('http://localhost:4000/authors/all');
+	const response = await axios('/authors/all');
 	store.dispatch(updateAuthors(await response.data.result));
 };
 
@@ -20,11 +20,11 @@ export const fetchData = async () => {
 
 // ----USER----
 export const loginReq = async (credentials) => {
-	return await axios.post('http://localhost:4000/login', credentials);
+	return await axios.post('/login', credentials);
 };
 
 export const registrationReq = async (name, email, password) => {
-	return await axios.post('http://localhost:4000/register', {
+	return await axios.post('/register', {
 		name,
 		email,
 		password,
@@ -32,7 +32,7 @@ export const registrationReq = async (name, email, password) => {
 };
 
 export const logoutReq = async (token) => {
-	return await axios.delete('http://localhost:4000/logout', {
+	return await axios.delete('/logout', {
 		headers: {
 			Authorization: token,
 		},
@@ -40,7 +40,7 @@ export const logoutReq = async (token) => {
 };
 
 export const checkAuthReq = async (token) => {
-	return await axios.get('http://localhost:4000/users/me', {
+	return await axios.get('/users/me', {
 		headers: {
 			Authorization: token,
 		},
@@ -51,7 +51,7 @@ export const checkAuthReq = async (token) => {
 export const addCourseReq = async (course, token) => {
 	return axios({
 		method: 'post',
-		url: 'http://localhost:4000/courses/add',
+		url: '/courses/add',
 		headers: {
 			Authorization: token,
 		},
@@ -62,7 +62,7 @@ export const addCourseReq = async (course, token) => {
 export const deleteCourseReq = async (id, token) => {
 	return axios({
 		method: 'delete',
-		url: `http://localhost:4000/courses/${id}`,
+		url: `/courses/${id}`,
 		headers: {
 			Authorization: token,
 		},
@@ -72,7 +72,7 @@ export const deleteCourseReq = async (id, token) => {
 export const updateCourseReq = async (id, course, token) => {
 	return axios({
 		method: 'put',
-		url: `http://localhost:4000/courses/${id}`,
+		url: `/courses/${id}`,
 		headers: {
 			Authorization: token,
 		},
@@ -84,7 +84,7 @@ export const updateCourseReq = async (id, course, token) => {
 export const addAuthorReq = async (author, token) => {
 	return axios({
 		method: 'post',
-		url: 'http://localhost:4000/authors/add',
+		url: '/authors/add',
 		headers: {
 			Authorization: token,
 		},
@@ -95,7 +95,7 @@ export const addAuthorReq = async (author, token) => {
 export const deleteAuthorReq = async (id, token) => {
 	return axios({
 		method: 'delete',
-		url: `http://localhost:4000/authors/${id}`,
+		url: `/authors/${id}`,
 		headers: {
 			Authorization: token,
 		},

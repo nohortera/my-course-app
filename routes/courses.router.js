@@ -25,12 +25,20 @@ router.get('/all', async (req, res) => {
         })
     } catch (e) {
         console.log(e)
-        return res.status(500).json({ message: '/courses/all error' + e })
+        return res.status(500).json({ message: '/courses/all error' + e.message })
     }
 })
 
-router.post('/add', async (req, res) => {
+router.post('/add', require('../middleware/verification'), async (req, res) => {
     try {
+        if (req.decodedData.role !== 'admin') {
+            return res.status(403).json({
+                statusCode: 403,
+                message: 'Forbidden resource',
+                error: 'Forbidden'
+            })
+        }
+
         const data = req.body
 
         if (!data || Object.keys(data).length !== 4) {
@@ -55,18 +63,28 @@ router.post('/add', async (req, res) => {
         })
     } catch (e) {
         console.log(e)
-        return res.status(500).json({ message: '/courses/add error' + e })
+        return res.status(500).json({ message: '/courses/add error' + e.message })
     }
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', require('../middleware/verification'), async (req, res) => {
     try {
+        if (req.decodedData.role !== 'admin') {
+            return res.status(403).json({
+                statusCode: 403,
+                message: 'Forbidden resource',
+                error: 'Forbidden'
+            })
+        }
+
         const id = req.params.id
 
         const course = Course.findOne({ _id: id })
-
         if (!course) {
-            return res.status(404)
+            return res.status(404).json({
+                successful: false,
+                result: `Object with id - ${id} was not found.`
+            })
         }
 
         await Course.deleteOne({ _id: id })
@@ -78,7 +96,7 @@ router.delete('/:id', async (req, res) => {
 
     } catch (e) {
         console.log(e)
-        return res.status(500).json({ message: '/courses/all error' + e })
+        return res.status(500).json({ message: '/courses/all error' + e.message })
     }
 })
 

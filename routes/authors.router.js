@@ -18,12 +18,20 @@ router.get('/all', async (req, res) => {
         })
     } catch (e) {
         console.log(e)
-        return res.status(500).json({ message: 'authors/all route error:' + e })
+        return res.status(500).json({ message: 'authors/all route error:' + e.message })
     }
 })
 
-router.post('/add', async (req, res) => {
+router.post('/add', require('../middleware/verification'), async (req, res) => {
     try {
+        if (req.decodedData.role !== 'admin') {
+            return res.status(403).json({
+                statusCode: 403,
+                message: 'Forbidden resource',
+                error: 'Forbidden'
+            })
+        }
+
         const { name } = req.body
 
         if (!name) {
@@ -42,16 +50,40 @@ router.post('/add', async (req, res) => {
         res.json({ message: 'Author created successfully' })
     } catch (e) {
         console.log(e)
-        return res.status(500).json({ message: 'authors/add route error:' + e })
+        return res.status(500).json({ message: 'authors/add route error:' + e.message })
     }
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', require('../middleware/verification'), async (req, res) => {
     try {
+        if (req.decodedData.role !== 'admin') {
+            return res.status(403).json({
+                statusCode: 403,
+                message: 'Forbidden resource',
+                error: 'Forbidden'
+            })
+        }
+
+        const id = req.params.id
+
+        const author = await Author.findById(id)
+        if (!author) {
+            return res.status(404).json({
+                successful: false,
+                result: `Object with id - ${id} was not found.`
+            })
+        }
+
+        await Author.findByIdAndDelete(id)
+
+        res.json({
+            successful: true,
+            result: `Object with id - ${id} was deleted.`
+        })
 
     } catch (e) {
         console.log(e)
-        return res.status(500).json({ message: 'authors/add route error:' + e })
+        return res.status(500).json({ message: 'authors/add route error:' + e.message })
     }
 })
 

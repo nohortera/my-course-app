@@ -2,6 +2,7 @@ const express = require('express')
 const config = require('config')
 const cors = require('cors')
 const mongoose = require('mongoose')
+const path = require('path')
 
 const PORT = config.get('port') || 4000
 
@@ -20,7 +21,15 @@ app.post('/register', (req, res) => {
 app.use('/auth', require('./routes/auth.router'))
 app.use('/authors', require('./routes/authors.router'))
 app.use('/courses', require('./routes/courses.router'))
-app.get('/users/me', require('./routes/userCheck'))
+app.get('/users/me', require('./middleware/verification'), require('./routes/userCheck'))
+
+if (process.env.NODE_ENV === 'production') {
+    app.use('/', express.static(path.join(__dirname, 'client', 'build')))
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    })
+}
 
 const start = async () => {
     try {
