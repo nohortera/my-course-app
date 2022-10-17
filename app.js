@@ -4,7 +4,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const path = require('path')
 
-const PORT = config.get('port') || 4000
+const PORT = process.env.PORT || config.get('port') || 4000
 
 const app = express()
 
