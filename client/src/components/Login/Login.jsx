@@ -39,10 +39,6 @@ function Login() {
 		if (isAuth) navigate('/courses', { replace: true });
 	}, [isAuth]);
 
-	useEffect(() => {
-		console.log('render login');
-	}, []);
-
 	return (
 		<>
 			{isError && <p className='error'>Something went wrong...</p>}

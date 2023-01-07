@@ -35,7 +35,6 @@ function Courses() {
 		if (!coursesFromStore.length) {
 			fetchData();
 		}
-		console.log('render courses');
 	}, []);
 
 	return (
